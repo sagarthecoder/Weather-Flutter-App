@@ -48,7 +48,23 @@ class _LoginScreenState extends State<LoginScreen> {
               child: buildTextFields(),
             ),
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: EdgeInsets.only(top: 10),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                    onPressed: () {},
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        'Forgot password?',
+                        style:
+                            TextStyle(color: Color(0XFF1F41BB), fontSize: 14),
+                      ),
+                    )),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 26),
               width: double.infinity,
               child: makeSignInButton(),
             ),
