@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/Views/LoginScreen.dart';
+import 'package:weather_flutter/firebase_options.dart';
 import 'Modules/UISections/Oauth/Signup/Views/SignupScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
