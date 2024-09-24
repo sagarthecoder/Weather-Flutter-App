@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_flutter/Modules/UISections/Oauth/Login/Model/OauthEnums.dart';
 
 class ContinueWithView extends StatefulWidget {
-  const ContinueWithView({super.key});
+  final void Function(SocialSignInProvider provider)?
+      selectedSocialProviderHandler;
+  // const ContinueWithView({Key? key, })
+  const ContinueWithView({Key? key, this.selectedSocialProviderHandler})
+      : super(key: key);
 
   @override
   State<ContinueWithView> createState() => _ContinueWithViewState();
@@ -27,15 +32,15 @@ class _ContinueWithViewState extends State<ContinueWithView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              makeSocialButton('utils/images/google-icon.png'),
+              makeSocialButton(SocialSignInProvider.google),
               SizedBox(
                 width: 10,
               ),
-              makeSocialButton('utils/images/facebook-icon.png'),
+              makeSocialButton(SocialSignInProvider.facebook),
               SizedBox(
                 width: 10,
               ),
-              makeSocialButton('utils/images/apple-icon.png'),
+              makeSocialButton(SocialSignInProvider.apple),
             ],
           )
         ],
@@ -43,15 +48,17 @@ class _ContinueWithViewState extends State<ContinueWithView> {
     );
   }
 
-  Widget makeSocialButton(String imageName) {
+  Widget makeSocialButton(SocialSignInProvider provider) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        widget.selectedSocialProviderHandler?.call(provider);
+      },
       style: ElevatedButton.styleFrom(
           backgroundColor: Color(0XFFECECEC),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       child: Image.asset(
-        imageName,
+        provider.getSocialImagePath(),
       ),
     );
   }

@@ -12,7 +12,12 @@
           "package_name": "com.example.flutterfireCli"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "770238180985-7q93s7slnvffpenp1ed2o99b64mk2507.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDhXMStCJ5ezBIYEBX_OkBAh1n95F27zyQ"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "770238180985-7q93s7slnvffpenp1ed2o99b64mk2507.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "770238180985-i3vvfpb1o1t1hq2p4qua4l3rq53jbp0p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.weatherFlutter"
+              }
+            }
+          ]
         }
       }
     }

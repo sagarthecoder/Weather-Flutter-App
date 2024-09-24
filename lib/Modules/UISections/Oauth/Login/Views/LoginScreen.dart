@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_flutter/Modules/Service/AuthService/AuthService.dart';
+import 'package:weather_flutter/Modules/UISections/Oauth/Login/Model/OauthEnums.dart';
+import 'package:weather_flutter/Modules/UISections/Oauth/Login/ViewModel/AuthViewModel.dart';
 import 'package:weather_flutter/main.dart';
 
 import '../../CommonViews/ContinueWithView.dart';
@@ -16,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  AuthViewModel viewModel = AuthViewModel();
+
   bool isLoading = false;
 
   @override
@@ -79,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                       onPressed: () {},
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerRight,
                         child: Text(
                           'Forgot password?',
@@ -98,12 +102,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 margin: EdgeInsets.only(top: 40),
                 child: RichText(
                     text: TextSpan(children: [
-                  TextSpan(
+                  const TextSpan(
                       text: "Don't have account? ",
                       style: TextStyle(color: Color(0XFF494949), fontSize: 14)),
                   TextSpan(
                     text: 'Sign up',
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                         fontSize: 11),
@@ -118,7 +122,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 60),
-                child: ContinueWithView(),
+                child: ContinueWithView(
+                  selectedSocialProviderHandler: (provider) {
+                    socialLogin(provider, context);
+                  },
+                ),
               )
             ]),
           ),
@@ -222,6 +230,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isEnabledLoginButton() {
     return (email.text.isNotEmpty && password.text.isNotEmpty);
+  }
+
+  Future<void> socialLogin(
+      SocialSignInProvider provider, BuildContext context) async {
+    updateLoadingState(true);
+    try {
+      await viewModel.socialSignin(provider);
+      updateLoadingState(false);
+      Navigator.push(context, MaterialPageRoute(builder: (_) {
+        return DemoHome();
+      }));
+    } catch (err) {
+      updateLoadingState(false);
+      print('Error = ${err.toString()}');
+      showAlertDialog(context, err.toString());
+    }
   }
 
   Future<void> signIn(BuildContext context) async {

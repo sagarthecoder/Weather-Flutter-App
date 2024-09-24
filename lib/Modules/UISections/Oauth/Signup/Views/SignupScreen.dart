@@ -5,6 +5,9 @@ import 'package:weather_flutter/Modules/Service/AuthService/AuthService.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/CommonViews/ContinueWithView.dart';
 import 'package:weather_flutter/main.dart';
 
+import '../../Login/Model/OauthEnums.dart';
+import '../../Login/ViewModel/AuthViewModel.dart';
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -13,6 +16,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  AuthViewModel viewModel = AuthViewModel();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
@@ -102,7 +106,11 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 60),
-                child: ContinueWithView(),
+                child: ContinueWithView(
+                  selectedSocialProviderHandler: (provider) {
+                    socialLogin(provider, context);
+                  },
+                ),
               )
             ]),
           ),
@@ -215,6 +223,22 @@ class _SignupScreenState extends State<SignupScreen> {
         return alert;
       },
     );
+  }
+
+  Future<void> socialLogin(
+      SocialSignInProvider provider, BuildContext context) async {
+    updateLoadingState(true);
+    try {
+      await viewModel.socialSignin(provider);
+      updateLoadingState(false);
+      Navigator.push(context, MaterialPageRoute(builder: (_) {
+        return DemoHome();
+      }));
+    } catch (err) {
+      updateLoadingState(false);
+      print('Error = ${err.toString()}');
+      showAlertDialog(context, err.toString());
+    }
   }
 
   Future<void> signup(BuildContext context) async {

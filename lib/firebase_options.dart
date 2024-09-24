@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '770238180985',
     projectId: 'weather-flutter-34eeb',
     storageBucket: 'weather-flutter-34eeb.appspot.com',
+    iosClientId: '770238180985-i3vvfpb1o1t1hq2p4qua4l3rq53jbp0p.apps.googleusercontent.com',
     iosBundleId: 'com.example.weatherFlutter',
   );
+
 }
