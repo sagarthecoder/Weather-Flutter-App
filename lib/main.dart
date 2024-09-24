@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_flutter/Modules/Service/NetworkService/NetworkService.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/Views/LoginScreen.dart';
+import 'package:weather_flutter/Modules/UISections/Weather/Model/WeatherResult.dart';
 import 'package:weather_flutter/firebase_options.dart';
 import 'Modules/UISections/Oauth/Signup/Views/SignupScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,6 +49,7 @@ class DemoHome extends StatefulWidget {
 class _DemoHomeState extends State<DemoHome> {
   @override
   Widget build(BuildContext context) {
+    checkAPI();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
@@ -56,5 +59,17 @@ class _DemoHomeState extends State<DemoHome> {
         child: Text("Home"),
       ),
     );
+  }
+
+  Future<void> checkAPI() async {
+    // try {
+    //   var result = await NetworkService.shared.genericApiRequest<WeatherResult>(
+    //       "https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=5d6689818613ac9263790406144a1fb8",
+    //       RequestMethod.get,
+    //       WeatherResult.fromJson);
+    //   print("Result = ${result?.sys?.sunset}");
+    // } catch (err) {
+    //   print('err = ${err}');
+    // }
   }
 }
