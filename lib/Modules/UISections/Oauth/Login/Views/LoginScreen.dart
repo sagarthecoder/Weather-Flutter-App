@@ -1,8 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_flutter/Config/WeatherConfig.dart';
 import 'package:weather_flutter/Modules/Service/AuthService/AuthService.dart';
+import 'package:weather_flutter/Modules/Service/LocationService/LocationService.dart';
+import 'package:weather_flutter/Modules/Service/NetworkService/NetworkService.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/Model/OauthEnums.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/ViewModel/AuthViewModel.dart';
+import 'package:weather_flutter/Modules/UISections/Weather/Model/WeatherResult.dart';
+import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherScreen.dart';
 import 'package:weather_flutter/main.dart';
 
 import '../../CommonViews/ContinueWithView.dart';
@@ -238,9 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await viewModel.socialSignin(provider);
       updateLoadingState(false);
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return DemoHome();
-      }));
+      gotoWeatherScreen(context);
     } catch (err) {
       updateLoadingState(false);
       print('Error = ${err.toString()}');
@@ -253,13 +256,16 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await AuthService.shared.signInWithEmail(email.text, password.text);
       updateLoadingState(false);
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return DemoHome();
-      }));
+      gotoWeatherScreen(context);
     } catch (err) {
       updateLoadingState(false);
       print('Error = ${err.toString()}');
       showAlertDialog(context, err.toString());
     }
+  }
+
+  void gotoWeatherScreen(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => WeatherScreen()));
   }
 }
