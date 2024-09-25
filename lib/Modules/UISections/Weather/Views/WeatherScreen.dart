@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/ViewModel/WeatherViewModel.dart';
@@ -6,10 +8,10 @@ import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherGridList
 
 import '../Manager/WeatherManager.dart';
 import '../Model/WeatherResult.dart';
+import 'CustomSearchDelegate.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
-
   @override
   State<WeatherScreen> createState() => _WeatherScreenState();
 }
@@ -32,25 +34,48 @@ class _WeatherScreenState extends State<WeatherScreen> {
         flexibleSpace: Container(
           decoration: getGradientBG(),
         ),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                final result = await showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
+                );
+                if (result != null) {
+                  didSelectSearchItem(result.toString());
+                }
+              },
+              icon: const Icon(Icons.search_outlined))
+        ],
       ),
       body: Consumer<WeatherViewModel>(
         builder: (context, viewModel, child) {
-          return Container(
-            decoration: getGradientBG(),
-            child: Column(
-              children: [
-                makeTopView(context),
-                Expanded(
-                  child: WeatherGridList(
-                    weatherResult: viewModel.weatherResult,
-                  ),
+          return Stack(
+            children: [
+              Container(
+                decoration: getGradientBG(),
+                child: Column(
+                  children: [
+                    makeTopView(context),
+                    Expanded(
+                      child: WeatherGridList(
+                        weatherResult: viewModel.weatherResult,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              showLoaderIfNeeded(),
+            ],
           );
         },
       ),
     );
+  }
+
+  void didSelectSearchItem(String item) {
+    WeatherViewModel viewModel = context.read<WeatherViewModel>();
+    viewModel.updateWeatherByCity(item);
   }
 
   Widget makeTopView(BuildContext context) {
@@ -79,5 +104,21 @@ class _WeatherScreenState extends State<WeatherScreen> {
         colors: [Color(0XFF2E335A), Color(0XFF1C1B33)],
       ),
     );
+  }
+
+  Widget showLoaderIfNeeded() {
+    WeatherViewModel viewModel = context.read<WeatherViewModel>();
+    if (viewModel.isLoading) {
+      return Positioned.fill(
+        child: Container(
+          color: Colors.black.withOpacity(0.4),
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }
