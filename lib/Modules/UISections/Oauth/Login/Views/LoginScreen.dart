@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:weather_flutter/Modules/Service/AuthService/AuthService.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/Model/OauthEnums.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/ViewModel/AuthViewModel.dart';
-import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherScreen.dart';
 
 import '../../../Home/Views/HomeScreen.dart';
 import '../../CommonViews/ContinueWithView.dart';

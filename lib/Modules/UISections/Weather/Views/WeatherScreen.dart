@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:weather_flutter/Modules/UISections/Weather/Manager/WeatherManager.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_flutter/Modules/UISections/Weather/ViewModel/WeatherViewModel.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/TemperatureInfoView.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherGridList.dart';
 
-import '../../../../Config/WeatherConfig.dart';
-import '../../../Service/LocationService/LocationService.dart';
-import '../../../Service/NetworkService/NetworkService.dart';
+import '../Manager/WeatherManager.dart';
 import '../Model/WeatherResult.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -16,74 +15,57 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  WeatherResult? weatherResult;
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    startServerCall();
+    // Call updateCurrentWeather after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<WeatherViewModel>().updateCurrentWeather();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // toolbarHeight: 0,
         backgroundColor: const Color(0XFF2E335A),
         flexibleSpace: Container(
           decoration: getGradientBG(),
         ),
       ),
-      body: Builder(builder: (context) {
-        return Container(
-          decoration: getGradientBG(),
-          child: Column(
-            children: [
-              makeTopView(),
-              Expanded(
-                child: WeatherGridList(
-                  weatherResult: weatherResult,
+      body: Consumer<WeatherViewModel>(
+        builder: (context, viewModel, child) {
+          return Container(
+            decoration: getGradientBG(),
+            child: Column(
+              children: [
+                makeTopView(context),
+                Expanded(
+                  child: WeatherGridList(
+                    weatherResult: viewModel.weatherResult,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
-  Future<void> startServerCall() async {
-    print('start server');
-    try {
-      print('Checking location permission...');
-      final locationData = await LocationService.shared.getCurrentLocation();
-      final lat = locationData.latitude;
-      final lon = locationData.longitude;
-      print('lat  = $lat, lon = $lon');
-      final url =
-          "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=${WeatherConfig.apiKey}";
-      final data = await NetworkService.shared
-          .genericApiRequest(url, RequestMethod.get, WeatherResult.fromJson);
-      setState(() {
-        weatherResult = data;
-        print('sunset = ${weatherResult?.sys?.sunset}');
-      });
-    } catch (err) {
-      print('err = ${err.toString()}');
-    }
-  }
-
-  Widget makeTopView() {
+  Widget makeTopView(BuildContext context) {
+    WeatherViewModel viewModel = context.read<WeatherViewModel>();
+    WeatherResult? weatherResult = viewModel.weatherResult;
     return Container(
       height: 94.0,
       width: double.infinity,
       decoration: getGradientBG(),
       child: TemperatureInfoView(
-          place: weatherResult?.name ?? "Not Found",
-          temperature:
-              '${WeatherManager.shared.kelvinToCelsius(weatherResult?.main?.temperature ?? 0.0).toStringAsFixed(2)}\u00b0',
-          description: weatherResult?.weather?.first.description ?? ""),
+        place: weatherResult?.name ?? "Not Found",
+        temperature:
+            '${WeatherManager.shared.kelvinToCelsius(weatherResult?.main?.temperature ?? 0.0).toStringAsFixed(2)}\u00b0',
+        description: weatherResult?.weather?.first.description ?? "",
+      ),
     );
   }
 

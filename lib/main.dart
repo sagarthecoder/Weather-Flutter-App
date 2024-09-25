@@ -35,50 +35,5 @@ class MyApp extends StatelessWidget {
 
   Widget decideDestination() {
     return const LoginScreen();
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return const DemoHome();
-        } else {
-          return const LoginScreen();
-        }
-      },
-    );
-  }
-}
-
-class DemoHome extends StatefulWidget {
-  const DemoHome({super.key});
-
-  @override
-  State<DemoHome> createState() => _DemoHomeState();
-}
-
-class _DemoHomeState extends State<DemoHome> {
-  @override
-  Widget build(BuildContext context) {
-    checkAPI();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        toolbarHeight: 40,
-      ),
-      body: const Center(
-        child: Text("Home"),
-      ),
-    );
-  }
-
-  Future<void> checkAPI() async {
-    // try {
-    //   var result = await NetworkService.shared.genericApiRequest<WeatherResult>(
-    //       "https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=5d6689818613ac9263790406144a1fb8",
-    //       RequestMethod.get,
-    //       WeatherResult.fromJson);
-    //   print("Result = ${result?.sys?.sunset}");
-    // } catch (err) {
-    //   print('err = ${err}');
-    // }
   }
 }

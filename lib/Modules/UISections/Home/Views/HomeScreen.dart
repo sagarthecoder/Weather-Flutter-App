@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_flutter/Modules/UISections/TabBar/TabItem.dart';
 import 'package:weather_flutter/Modules/UISections/Theme/Views/ThemeView.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherScreen.dart';
 import 'package:weather_icons/weather_icons.dart';
+
+import '../../Weather/ViewModel/WeatherViewModel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,7 +38,10 @@ class _HomeScreenState extends State<HomeScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          WeatherScreen(),
+          ChangeNotifierProvider(
+            create: (_) => WeatherViewModel(),
+            child: WeatherScreen(),
+          ),
           ThemeView(),
         ],
       ),
