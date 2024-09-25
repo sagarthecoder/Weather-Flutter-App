@@ -29,7 +29,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 0,
+        // toolbarHeight: 0,
         backgroundColor: const Color(0XFF2E335A),
         flexibleSpace: Container(
           decoration: getGradientBG(),
@@ -69,7 +69,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
         weatherResult = data;
         print('sunset = ${weatherResult?.sys?.sunset}');
       });
-        } catch (err) {
+    } catch (err) {
       print('err = ${err.toString()}');
     }
   }

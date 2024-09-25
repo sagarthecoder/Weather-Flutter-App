@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weather_flutter/Modules/UISections/Home/Model/TabItem.dart';
+import 'package:weather_flutter/Modules/UISections/TabBar/TabItem.dart';
+import 'package:weather_flutter/Modules/UISections/Theme/Views/ThemeView.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherScreen.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -35,9 +36,7 @@ class _HomeScreenState extends State<HomeScreen>
         controller: _tabController,
         children: [
           WeatherScreen(),
-          Center(
-            child: Text('Settings'),
-          ),
+          ThemeView(),
         ],
       ),
     );
@@ -51,12 +50,12 @@ class _HomeScreenState extends State<HomeScreen>
         indicatorPadding: EdgeInsets.only(bottom: 4),
         tabs: [
           Tab(
-            text: 'weather',
+            text: 'Weather',
             icon: Icon(WeatherIcons.day_windy),
           ),
           Tab(
-            text: 'theme',
-            icon: Icon(Icons.settings),
+            text: 'Theme',
+            icon: Icon(Icons.branding_watermark),
           )
         ],
       ),
