@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Model/Weather.dart';

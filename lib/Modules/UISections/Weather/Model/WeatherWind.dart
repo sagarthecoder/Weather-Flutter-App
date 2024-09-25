@@ -1,8 +1,6 @@
-import 'dart:ffi';
 
 import 'package:json_annotation/json_annotation.dart';
 
-import 'SerializingFilter.dart';
 part 'WeatherWind.g.dart';
 
 @JsonSerializable()

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TemperatureInfoView extends StatefulWidget {
@@ -18,7 +17,7 @@ class TemperatureInfoView extends StatefulWidget {
 class _TemperatureInfoViewState extends State<TemperatureInfoView> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Column(
@@ -26,13 +25,13 @@ class _TemperatureInfoViewState extends State<TemperatureInfoView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            widget.description,
-            style: TextStyle(color: Colors.white, fontSize: 34),
+            widget.place,
+            style: const TextStyle(color: Colors.white, fontSize: 34),
           ),
           Text(
             '${widget.temperature} | ${widget.description}',
             style: TextStyle(
-              color: Color(0XFFEBEBF5).withOpacity(0.6),
+              color: const Color(0XFFEBEBF5).withOpacity(0.6),
               fontSize: 20,
             ),
           ),

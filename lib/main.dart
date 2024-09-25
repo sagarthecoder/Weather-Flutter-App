@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
       ),
@@ -25,14 +26,14 @@ class MyApp extends StatelessWidget {
   }
 
   Widget decideDestination() {
-    return LoginScreen();
+    return const LoginScreen();
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return DemoHome();
+          return const DemoHome();
         } else {
-          return LoginScreen();
+          return const LoginScreen();
         }
       },
     );
@@ -55,7 +56,7 @@ class _DemoHomeState extends State<DemoHome> {
         backgroundColor: Colors.deepPurple,
         toolbarHeight: 40,
       ),
-      body: Center(
+      body: const Center(
         child: Text("Home"),
       ),
     );

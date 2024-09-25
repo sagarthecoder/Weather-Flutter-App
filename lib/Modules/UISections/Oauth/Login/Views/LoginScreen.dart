@@ -1,14 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:weather_flutter/Config/WeatherConfig.dart';
 import 'package:weather_flutter/Modules/Service/AuthService/AuthService.dart';
-import 'package:weather_flutter/Modules/Service/LocationService/LocationService.dart';
-import 'package:weather_flutter/Modules/Service/NetworkService/NetworkService.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/Model/OauthEnums.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/ViewModel/AuthViewModel.dart';
-import 'package:weather_flutter/Modules/UISections/Weather/Model/WeatherResult.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherScreen.dart';
-import 'package:weather_flutter/main.dart';
 
 import '../../CommonViews/ContinueWithView.dart';
 import '../../Signup/Views/SignupScreen.dart';
@@ -54,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         body: Stack(children: [
           Container(
-            margin: EdgeInsets.only(top: 20, left: 31, right: 31),
+            margin: const EdgeInsets.only(top: 20, left: 31, right: 31),
             child: Column(children: [
               const Center(
                 child: Text(
@@ -79,11 +74,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: const EdgeInsets.only(top: 40),
                 child: buildTextFields(),
               ),
               Container(
-                margin: EdgeInsets.only(top: 10),
+                margin: const EdgeInsets.only(top: 10),
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -99,12 +94,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 26),
+                margin: const EdgeInsets.only(top: 26),
                 width: double.infinity,
                 child: makeSignInButton(),
               ),
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: const EdgeInsets.only(top: 40),
                 child: RichText(
                     text: TextSpan(children: [
                   const TextSpan(
@@ -119,14 +114,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) {
-                          return SignupScreen();
+                          return const SignupScreen();
                         }));
                       },
                   )
                 ])),
               ),
               Container(
-                margin: EdgeInsets.only(top: 60),
+                margin: const EdgeInsets.only(top: 60),
                 child: ContinueWithView(
                   selectedSocialProviderHandler: (provider) {
                     socialLogin(provider, context);
@@ -141,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget showLoaderIfNeeded() {
     if (isLoading) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     } else {
@@ -153,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
       [String title = 'Alert!']) {
     // set up the button
     Widget okButton = TextButton(
-      child: Text("OK"),
+      child: const Text("OK"),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -203,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
               : null,
           style: ElevatedButton.styleFrom(
-              backgroundColor: Color((0XFF1F41BB)),
+              backgroundColor: const Color((0XFF1F41BB)),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8))),
           child: const Text(
@@ -228,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
         hintStyle: TextStyle(color: Colors.grey[800]?.withOpacity(0.4)),
         hintText: hintText,
         filled: true,
-        fillColor: Color(0XffF1F4FF),
+        fillColor: const Color(0XffF1F4FF),
       ),
     );
   }
@@ -266,6 +261,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void gotoWeatherScreen(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WeatherScreen()));
+        context, MaterialPageRoute(builder: (context) => const WeatherScreen()));
   }
 }

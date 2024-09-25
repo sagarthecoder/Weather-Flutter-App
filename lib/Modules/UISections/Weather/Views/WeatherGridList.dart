@@ -5,6 +5,8 @@ import 'package:weather_flutter/Modules/UISections/Weather/Model/WeatherResult.d
 import 'package:weather_flutter/Modules/UISections/Weather/Views/SunInfoView.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherInfoView.dart';
 
+import '../Manager/WeatherManager.dart';
+
 class WeatherGridList extends StatefulWidget {
   final WeatherResult? weatherResult;
   const WeatherGridList({required this.weatherResult, super.key});
@@ -17,8 +19,8 @@ class _WeatherGridListState extends State<WeatherGridList> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: EdgeInsets.all(8),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      padding: const EdgeInsets.all(8),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
@@ -38,7 +40,7 @@ class _WeatherGridListState extends State<WeatherGridList> {
       width: itemWidth,
       height: itemHeight,
       decoration: BoxDecoration(
-        color: Color(0XFF48319D).withOpacity(0.2),
+        color: const Color(0XFF48319D).withOpacity(0.2),
         borderRadius: BorderRadius.circular(16),
       ),
       child: getItemView(category),
@@ -72,7 +74,7 @@ class _WeatherGridListState extends State<WeatherGridList> {
         return WeatherInfoView(
             topText: 'FEELS LIKE',
             information:
-                "${widget.weatherResult?.main?.feelsLike ?? 0.00}'\u00B0'",
+                '${WeatherManager.shared.kelvinToCelsius(widget.weatherResult?.main?.feelsLike ?? 0.0).toStringAsFixed(2)}\u00b0',
             bottomText: '');
     }
   }

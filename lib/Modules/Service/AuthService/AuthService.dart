@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:weather_flutter/Modules/UISections/Oauth/Login/Model/OauthEnums.dart';
 
 final class AuthService {
   AuthService._internal();

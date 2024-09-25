@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class SunInfoView extends StatefulWidget {
   final String sunriseTime;
@@ -15,7 +14,7 @@ class _SunInfoViewState extends State<SunInfoView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 6, left: 4),
+      margin: const EdgeInsets.only(top: 6, left: 4),
       child: Stack(children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -24,15 +23,15 @@ class _SunInfoViewState extends State<SunInfoView> {
             Text(
               'SUNRISE',
               style: TextStyle(
-                  color: Color(0XFFEBEBF5).withOpacity(0.6), fontSize: 18),
+                  color: const Color(0XFFEBEBF5).withOpacity(0.6), fontSize: 18),
             ),
             Text(
               widget.sunriseTime,
-              style: TextStyle(color: Colors.white, fontSize: 26),
+              style: const TextStyle(color: Colors.white, fontSize: 26),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Divider(
+              margin: const EdgeInsets.only(top: 20),
+              child: const Divider(
                 color: Colors.grey,
               ),
             )
@@ -44,7 +43,7 @@ class _SunInfoViewState extends State<SunInfoView> {
             alignment: Alignment.bottomLeft,
             child: Text(
               'Sunset: ${widget.sunsetTime}',
-              style: TextStyle(color: Colors.white, fontSize: 13),
+              style: const TextStyle(color: Colors.white, fontSize: 13),
             ),
           ),
         )

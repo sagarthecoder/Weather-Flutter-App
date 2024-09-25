@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_flutter/Modules/Service/AuthService/AuthService.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/CommonViews/ContinueWithView.dart';
-import 'package:weather_flutter/main.dart';
 
 import '../../../Weather/Views/WeatherScreen.dart';
 import '../../Login/Model/OauthEnums.dart';
@@ -52,7 +50,7 @@ class _SignupScreenState extends State<SignupScreen> {
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 20, left: 31, right: 31),
+            margin: const EdgeInsets.only(top: 20, left: 31, right: 31),
             child: Column(children: [
               const Center(
                 child: Text(
@@ -77,24 +75,24 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: const EdgeInsets.only(top: 40),
                 child: buildTextFields(),
               ),
               Container(
-                margin: EdgeInsets.only(top: 50),
+                margin: const EdgeInsets.only(top: 50),
                 width: double.infinity,
                 child: makeSignUpButton(),
               ),
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: const EdgeInsets.only(top: 40),
                 child: RichText(
                     text: TextSpan(children: [
-                  TextSpan(
+                  const TextSpan(
                       text: 'Already have an account? ',
                       style: TextStyle(color: Color(0XFF494949), fontSize: 14)),
                   TextSpan(
                     text: 'Login',
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                         fontSize: 11),
@@ -106,7 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ])),
               ),
               Container(
-                margin: EdgeInsets.only(top: 60),
+                margin: const EdgeInsets.only(top: 60),
                 child: ContinueWithView(
                   selectedSocialProviderHandler: (provider) {
                     socialLogin(provider, context);
@@ -147,7 +145,7 @@ class _SignupScreenState extends State<SignupScreen> {
         hintStyle: TextStyle(color: Colors.grey[800]?.withOpacity(0.4)),
         hintText: hintText,
         filled: true,
-        fillColor: Color(0XffF1F4FF),
+        fillColor: const Color(0XffF1F4FF),
       ),
     );
   }
@@ -166,7 +164,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 }
               : null,
           style: ElevatedButton.styleFrom(
-              backgroundColor: Color((0XFF1F41BB)),
+              backgroundColor: const Color((0XFF1F41BB)),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8))),
           child: const Text(
@@ -182,15 +180,15 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   bool isEnabledSignUpButton() {
-    return (!email.text.isEmpty &&
-        !password.text.isEmpty &&
-        !confirmPassword.text.isEmpty &&
+    return (email.text.isNotEmpty &&
+        password.text.isNotEmpty &&
+        confirmPassword.text.isNotEmpty &&
         password.text == confirmPassword.text);
   }
 
   Widget showLoaderIfNeeded() {
     if (isLoading) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     } else {
@@ -202,7 +200,7 @@ class _SignupScreenState extends State<SignupScreen> {
       [String title = 'Alert!']) {
     // set up the button
     Widget okButton = TextButton(
-      child: Text("OK"),
+      child: const Text("OK"),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -255,6 +253,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void gotoWeatherScreen(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WeatherScreen()));
+        context, MaterialPageRoute(builder: (context) => const WeatherScreen()));
   }
 }

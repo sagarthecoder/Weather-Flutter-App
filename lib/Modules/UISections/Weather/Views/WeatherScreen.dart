@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_flutter/Modules/UISections/Weather/Manager/WeatherManager.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/TemperatureInfoView.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherGridList.dart';
 
@@ -30,7 +30,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
-        backgroundColor: Color(0XFF2E335A),
+        backgroundColor: const Color(0XFF2E335A),
         flexibleSpace: Container(
           decoration: getGradientBG(),
         ),
@@ -60,18 +60,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
       final locationData = await LocationService.shared.getCurrentLocation();
       final lat = locationData.latitude;
       final lon = locationData.longitude;
-      print('lat  = ${lat}, lon = ${lon}');
-      if (lat != null && lon != null) {
-        final url =
-            "https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WeatherConfig.apiKey}";
-        final data = await NetworkService.shared
-            .genericApiRequest(url, RequestMethod.get, WeatherResult.fromJson);
-        setState(() {
-          weatherResult = data;
-          print('sunset = ${weatherResult?.sys?.sunset}');
-        });
-      }
-    } catch (err) {
+      print('lat  = $lat, lon = $lon');
+      final url =
+          "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=${WeatherConfig.apiKey}";
+      final data = await NetworkService.shared
+          .genericApiRequest(url, RequestMethod.get, WeatherResult.fromJson);
+      setState(() {
+        weatherResult = data;
+        print('sunset = ${weatherResult?.sys?.sunset}');
+      });
+        } catch (err) {
       print('err = ${err.toString()}');
     }
   }
@@ -82,7 +80,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
       width: double.infinity,
       decoration: getGradientBG(),
       child: TemperatureInfoView(
-          place: 'Dhaka', temperature: '19', description: 'Mostly clear'),
+          place: weatherResult?.name ?? "Not Found",
+          temperature:
+              '${WeatherManager.shared.kelvinToCelsius(weatherResult?.main?.temperature ?? 0.0).toStringAsFixed(2)}\u00b0',
+          description: weatherResult?.weather?.first.description ?? ""),
     );
   }
 

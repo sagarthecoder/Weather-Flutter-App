@@ -15,7 +15,7 @@ class _WeatherInfoViewState extends State<WeatherInfoView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 6, left: 4),
+      margin: const EdgeInsets.only(top: 6, left: 4),
       child: Stack(children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -24,15 +24,15 @@ class _WeatherInfoViewState extends State<WeatherInfoView> {
             Text(
               widget.topText,
               style: TextStyle(
-                  color: Color(0XFFEBEBF5).withOpacity(0.6), fontSize: 18),
+                  color: const Color(0XFFEBEBF5).withOpacity(0.6), fontSize: 18),
             ),
             Text(
               widget.information,
-              style: TextStyle(color: Colors.white, fontSize: 26),
+              style: const TextStyle(color: Colors.white, fontSize: 26),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Divider(
+              margin: const EdgeInsets.only(top: 20),
+              child: const Divider(
                 color: Colors.grey,
               ),
             )
@@ -44,7 +44,7 @@ class _WeatherInfoViewState extends State<WeatherInfoView> {
             alignment: Alignment.bottomLeft,
             child: Text(
               widget.bottomText,
-              style: TextStyle(color: Colors.white, fontSize: 13),
+              style: const TextStyle(color: Colors.white, fontSize: 13),
             ),
           ),
         )
