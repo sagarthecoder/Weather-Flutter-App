@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:weather_flutter/Modules/Service/APICacheService/APICacheService.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Manager/WeatherPreferences.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Model/CityLocation.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Model/CityLocationList.dart';
@@ -33,6 +35,7 @@ class WeatherViewModel extends ChangeNotifier {
       final locationData = await LocationService.shared.getCurrentLocation();
       final lat = locationData.latitude;
       final lon = locationData.longitude;
+      print('lat = ${lat}');
       _updateWeather(lat, lon);
     } catch (err) {
       print('err = ${err.toString()}');
@@ -60,15 +63,33 @@ class WeatherViewModel extends ChangeNotifier {
   }
 
   Future<CityLocation?> _getCityLocation(String city) async {
+    final hasNetwork = await InternetConnection().hasInternetAccess;
+    print('conection = ${hasNetwork}');
     final url =
         "https://api.openweathermap.org/geo/1.0/direct?q=${city.replaceAll(' ', '%20')}&limit=1&appid=${WeatherConfig.apiKey}";
-    final response = await http.get(Uri.parse(url));
-    final jsonResponse = json.decode(response.body);
-    CityLocationList? locationList = CityLocationList.fromJson(jsonResponse);
-    return locationList.locations?.first;
+    if (hasNetwork) {
+      final response = await http.get(Uri.parse(url));
+      await APICacheService.shared.setCache(url, response.body);
+      final jsonResponse = json.decode(response.body);
+      CityLocationList? locationList = CityLocationList.fromJson(jsonResponse);
+      return locationList.locations?.first;
+    } else {
+      var cachedResponse = await APICacheService.shared.fetchResponse(url);
+      print('cache response = ${cachedResponse.toString()}');
+      if (cachedResponse != null) {
+        // Use the cached response body for offline use
+        // final jsonResponse = json.decode(cachedResponse.body);
+        final decodedData = jsonDecode(cachedResponse.body);
+        CityLocationList? locationList = CityLocationList.fromJson(decodedData);
+        return locationList.locations?.first;
+      } else {
+        throw Exception('No cached data available and no network connection');
+      }
+    }
   }
 
   Future<void> _updateWeather(double? lat, double? lon) async {
+    print('Update Weather start');
     if (lat == null || lon == null) {
       print("Lat or Lon is null");
       return;
