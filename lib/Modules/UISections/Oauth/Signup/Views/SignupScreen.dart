@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_flutter/Modules/CustomViews/Field/CustomTextField.dart';
 import 'package:weather_flutter/Modules/Service/AuthService/AuthService.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/CommonViews/ContinueWithView.dart';
 
@@ -53,26 +54,15 @@ class _SignupScreenState extends State<SignupScreen> {
           Container(
             margin: const EdgeInsets.only(top: 20, left: 31, right: 31),
             child: Column(children: [
-              const Center(
+              const Align(
+                alignment: Alignment.centerLeft,
                 child: Text(
                   'Create an Account',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30.0,
-                    color: Color(0XFF1F41BB),
-                  ),
-                ),
-              ),
-              const Center(
-                child: Text(
-                  'Create an account so you can explore\nweathers of all countries',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14.0,
                     color: Colors.black,
                   ),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
                 ),
               ),
               Container(
@@ -90,7 +80,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     text: TextSpan(children: [
                   const TextSpan(
                       text: 'Already have an account? ',
-                      style: TextStyle(color: Color(0XFF494949), fontSize: 14)),
+                      style: TextStyle(color: Colors.black54, fontSize: 14)),
                   TextSpan(
                     text: 'Login',
                     style: const TextStyle(
@@ -100,6 +90,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         print('Login Tapped');
+                        Navigator.pop(context);
                       },
                   )
                 ])),
@@ -123,31 +114,17 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget buildTextFields() {
     return Column(
       children: [
-        makeTextField('Email', email),
+        CustomTextField(placeholder: 'Email', controller: email),
         const SizedBox(
           height: 26,
         ),
-        makeTextField('Password', password),
+        CustomTextField(placeholder: 'Password', controller: password),
         const SizedBox(
           height: 26,
         ),
-        makeTextField('Confirm Password', confirmPassword)
+        CustomTextField(
+            placeholder: 'Confirm password', controller: confirmPassword),
       ],
-    );
-  }
-
-  Widget makeTextField(String hintText, TextEditingController? controller) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        hintStyle: TextStyle(color: Colors.grey[800]?.withOpacity(0.4)),
-        hintText: hintText,
-        filled: true,
-        fillColor: const Color(0XffF1F4FF),
-      ),
     );
   }
 
@@ -165,7 +142,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 }
               : null,
           style: ElevatedButton.styleFrom(
-              backgroundColor: const Color((0XFF1F41BB)),
+              backgroundColor: Colors.blueAccent,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8))),
           child: const Text(

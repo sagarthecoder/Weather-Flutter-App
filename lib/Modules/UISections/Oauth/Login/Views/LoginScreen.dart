@@ -1,10 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_flutter/Modules/CustomViews/Field/CustomTextField.dart';
 import 'package:weather_flutter/Modules/Service/AuthService/AuthService.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/Model/OauthEnums.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/ViewModel/AuthViewModel.dart';
 
 import '../../../Home/Views/HomeScreen.dart';
+import '../../../Theme/Model/ThemeProvider.dart';
 import '../../CommonViews/ContinueWithView.dart';
 import '../../Signup/Views/SignupScreen.dart';
 
@@ -42,35 +45,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
+        backgroundColor:
+            themeProvider.currentThemeData?.scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.black38,
+          backgroundColor:
+              themeProvider.currentThemeData?.appBarTheme.backgroundColor,
           toolbarHeight: 30,
         ),
         body: Stack(children: [
           Container(
             margin: const EdgeInsets.only(top: 20, left: 31, right: 31),
             child: Column(children: [
-              const Center(
+              Align(
+                alignment: Alignment.centerLeft,
                 child: Text(
                   'Login here',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30.0,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const Center(
-                child: Text(
-                  "Welcome back you've been missed",
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14.0,
-                    color: Colors.black,
-                  ),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
+                  style:
+                      themeProvider.currentThemeData?.textTheme.headlineLarge,
                 ),
               ),
               Container(
@@ -83,12 +76,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                       onPressed: () {},
+                      style:
+                          themeProvider.currentThemeData?.textButtonTheme.style,
                       child: const Align(
                         alignment: Alignment.centerRight,
                         child: Text(
                           'Forgot password?',
-                          style:
-                              TextStyle(color: Color(0XFF1F41BB), fontSize: 14),
                         ),
                       )),
                 ),
@@ -104,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: TextSpan(children: [
                   const TextSpan(
                       text: "Don't have account? ",
-                      style: TextStyle(color: Color(0XFF494949), fontSize: 14)),
+                      style: TextStyle(color: Colors.black54, fontSize: 14)),
                   TextSpan(
                     text: 'Sign up',
                     style: const TextStyle(
@@ -175,19 +168,26 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget buildTextFields() {
     return Column(
       children: [
-        makeTextField('Email', email),
+        CustomTextField(
+          placeholder: 'Email',
+          controller: email,
+        ),
         const SizedBox(
           height: 26,
         ),
-        makeTextField('Password', password),
+        CustomTextField(
+          placeholder: 'Password',
+          controller: password,
+        ),
       ],
     );
   }
 
   Widget makeSignInButton() {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return SizedBox(
       width: double.infinity,
-      height: 60,
+      height: 54,
       child: Opacity(
         opacity: isEnabledLoginButton() ? 1.0 : 0.4,
         child: ElevatedButton(
@@ -198,32 +198,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
               : null,
           style: ElevatedButton.styleFrom(
-              backgroundColor: const Color((0XFF1F41BB)),
+              backgroundColor: Colors.blueAccent,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8))),
-          child: const Text(
+          child: Text(
             'Sign in',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.normal),
+            style: themeProvider.currentThemeData?.textTheme.titleSmall,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget makeTextField(String hintText, TextEditingController controller) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        hintStyle: TextStyle(color: Colors.grey[800]?.withOpacity(0.4)),
-        hintText: hintText,
-        filled: true,
-        fillColor: const Color(0XffF1F4FF),
       ),
     );
   }

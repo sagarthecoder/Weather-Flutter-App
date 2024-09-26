@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen>
       color: Colors.white54,
       child: TabBar(
         controller: _tabController,
-        indicatorPadding: EdgeInsets.only(bottom: 4),
+        indicatorPadding: const EdgeInsets.only(bottom: 4),
         tabs: [
           Tab(
             text: 'Weather',

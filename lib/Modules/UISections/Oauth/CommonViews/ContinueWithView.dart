@@ -20,9 +20,7 @@ class _ContinueWithViewState extends State<ContinueWithView> {
           const Text(
             'Or continue with',
             style: TextStyle(
-                color: Color(0XFF1F41BB),
-                fontSize: 14,
-                fontWeight: FontWeight.w500),
+                color: Colors.brown, fontSize: 14, fontWeight: FontWeight.w500),
           ),
           const SizedBox(
             height: 20,
@@ -52,10 +50,11 @@ class _ContinueWithViewState extends State<ContinueWithView> {
         widget.selectedSocialProviderHandler?.call(provider);
       },
       style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0XFFECECEC),
+          backgroundColor: Colors.greenAccent,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       child: Image.asset(
+        height: 50,
         provider.getSocialImagePath(),
       ),
     );
