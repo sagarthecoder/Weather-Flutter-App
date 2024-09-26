@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:weather_flutter/Modules/UISections/Weather/Manager/WeatherPreferences.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Model/CityLocation.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Model/CityLocationList.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Model/WeatherResult.dart';
@@ -12,6 +14,16 @@ import 'dart:convert';
 class WeatherViewModel extends ChangeNotifier {
   WeatherResult? weatherResult;
   var isLoading = false;
+  final _cityCacheKey = 'favorite_city_cache_key';
+  final _cacheManager = DefaultCacheManager();
+  List<String> favoriteCities = [];
+
+  Future<void> reset() async {
+    await updateCurrentWeather();
+    await refreshFavoriteCityList();
+    notifyListeners();
+  }
+
   Future<void> updateCurrentWeather() async {
     print('start server');
     isLoading = true;
@@ -66,6 +78,32 @@ class WeatherViewModel extends ChangeNotifier {
     final data = await NetworkService.shared
         .genericApiRequest(url, RequestMethod.get, WeatherResult.fromJson);
     weatherResult = data;
+    notifyListeners();
+  }
+
+  Future<void> refreshFavoriteCityList() async {
+    List<String> list = await WeatherPreferences.shared.getFavoritesCities();
+    favoriteCities = list;
+    notifyListeners();
+  }
+
+  Future<void> addNewCity(String? city) async {
+    try {
+      await WeatherPreferences.shared.addNewFavoriteCity(city);
+      await refreshFavoriteCityList();
+      notifyListeners();
+    } catch (err) {
+      print('Error = ${err.toString()}');
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteFavoriteCity(String? city) async {
+    try {
+      await WeatherPreferences.shared.deleteCityFromFavorite(city);
+    } catch (err) {
+      print('Error = ${err.toString()}');
+    }
     notifyListeners();
   }
 }

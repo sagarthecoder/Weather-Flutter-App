@@ -17,17 +17,19 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  WeatherViewModel viewModel = WeatherViewModel();
   @override
   void initState() {
     super.initState();
-    // Call updateCurrentWeather after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<WeatherViewModel>().updateCurrentWeather();
+      context.read<WeatherViewModel>().reset();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    viewModel = Provider.of<WeatherViewModel>(
+        context); //context.read<WeatherViewModel>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0XFF2E335A),
@@ -39,7 +41,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               onPressed: () async {
                 final result = await showSearch(
                   context: context,
-                  delegate: CustomSearchDelegate(),
+                  delegate: CustomSearchDelegate(parentContext: context),
                 );
                 if (result != null) {
                   didSelectSearchItem(result.toString());
@@ -74,12 +76,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   void didSelectSearchItem(String item) {
-    WeatherViewModel viewModel = context.read<WeatherViewModel>();
     viewModel.updateWeatherByCity(item);
   }
 
   Widget makeTopView(BuildContext context) {
-    WeatherViewModel viewModel = context.read<WeatherViewModel>();
     WeatherResult? weatherResult = viewModel.weatherResult;
     return Container(
       height: 94.0,
@@ -107,7 +107,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Widget showLoaderIfNeeded() {
-    WeatherViewModel viewModel = context.read<WeatherViewModel>();
     if (viewModel.isLoading) {
       return Positioned.fill(
         child: Container(

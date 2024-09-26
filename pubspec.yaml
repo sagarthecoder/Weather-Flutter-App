@@ -49,6 +49,7 @@ dependencies:
   weather_icons: ^3.0.0
   json_theme: ^6.5.3
   provider: ^6.1.2
+  flutter_cache_manager: ^3.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
