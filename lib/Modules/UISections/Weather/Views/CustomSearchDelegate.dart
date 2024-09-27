@@ -51,8 +51,8 @@ class CustomSearchDelegate extends SearchDelegate {
       // Wrap this in a try-catch to catch any exceptions
       try {
         var viewModel = Provider.of<WeatherViewModel>(parentContext);
-        viewModel.addNewCity(query);
-        close(context, query);
+        viewModel.addNewCity(queryString);
+        close(context, queryString);
       } catch (error) {
         print("Error: $error");
         // Handle the error gracefully, maybe show a snackbar or log the issue

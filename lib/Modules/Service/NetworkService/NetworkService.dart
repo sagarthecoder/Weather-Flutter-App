@@ -61,18 +61,15 @@ class NetworkService {
             response = await _dio.delete(url, options: options);
             break;
         }
-        // Cache the response body after fetching from the network
       } else {
         // Offline Mode: Retrieve data from cache
         var cachedResponse = await APICacheService.shared.fetchResponse(url);
         if (cachedResponse != null) {
-          // Use the cached response body for offline use
-          final decodedData = jsonDecode(cachedResponse.body);
-          print('decodedData = ${decodedData}');
-          return GenericResponse.fromJson(decodedData, fromJsonT);
+          return GenericResponse.fromJson(cachedResponse, fromJsonT);
           // return fromJson(decodedData);
         } else {
-          throw Exception('No cached data available and no network connection');
+          print('Cache response is null maybe. check = ${cachedResponse}');
+          return null;
         }
       }
 
@@ -82,15 +79,20 @@ class NetworkService {
           'message': response.statusMessage.toString(),
           'status': response.statusCode.toString(),
         };
-        await APICacheService.shared.setCache(url, result);
-        return GenericResponse.fromJson(result, fromJsonT);
-        // Return the data if the response is successful
-        // return response.d != null ? fromJson(response.data) : null;
+        final output = GenericResponse.fromJson(result, fromJsonT);
+        final jsonString =
+            jsonEncode(output.toJson((item) => (item as dynamic).toJson()));
+
+        // Encode JSON string to UTF-8 and Base64 for storage
+        String encodedString = base64Encode(utf8.encode(jsonString));
+
+        await APICacheService.shared.setCache(url, encodedString);
+        return output;
       } else {
         throw Exception('Failed to load data: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Network error: $e');
+      throw Exception('error: $e');
     }
   }
 }

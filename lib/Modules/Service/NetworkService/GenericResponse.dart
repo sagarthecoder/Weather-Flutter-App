@@ -35,11 +35,13 @@ class GenericResponse<T> {
   }
 
   // toJson method for serialization (optional if needed)
-  Map<String, dynamic> toJson(Object Function(T) toJsonT) => <String, dynamic>{
-        'message': message,
-        'data': data?.map(toJsonT).toList(),
-        'status': status,
-      };
+  Map<String, dynamic> toJson(Object Function(T) toJsonT) {
+    return {
+      'message': message,
+      'data': data?.map((item) => toJsonT(item)).toList(),
+      'status': status,
+    };
+  }
 
   // factory GenericResponse.fromJson(
   //     Map<String, dynamic> json, Function(Map<String, dynamic>) create) {
