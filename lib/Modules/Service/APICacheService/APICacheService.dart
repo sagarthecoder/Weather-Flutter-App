@@ -14,37 +14,56 @@ class APICacheService {
   Future<http.Response?> fetchResponse(String url) async {
     print('Trying to fetch cache');
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Get the cached response from SharedPreferences
     String? cachedResponse = prefs.getString(url);
-    print('cachedResponse get ');
+    print('cachedResponse get = $cachedResponse');
+
     if (cachedResponse != null) {
       try {
-        // Decode the cached JSON string
-        var decodedJson = json.decode(cachedResponse);
+        // Decode from base64
+        List<int> utf8Bytes = base64Decode(cachedResponse);
+        String decodedString =
+            utf8.decode(utf8Bytes); // Decode UTF-8 bytes back to string
 
-        // Return cached response as an http.Response object
-        // For arrays, convert it back into a string
+        // Decode the cached JSON string into a JSON object
+        var decodedJson = jsonDecode(decodedString);
+
+        // Convert it back to a JSON string to simulate a response
         final responseString = jsonEncode(decodedJson);
+        print("Response String cache = $responseString");
 
+        // Create a mock HTTP Response object from cached JSON
         final data = http.Response(responseString, 200,
             request: http.Request("GET", Uri.parse(url)));
 
         print("Got cache data for = $url");
         return data;
       } catch (e) {
+        print("Error decoding cached response: $e");
         throw Exception("Error decoding cached response: $e");
       }
     } else {
+      print("No cache found for $url");
       return null; // Cache not available
     }
   }
 
   // Set cache
   Future<void> setCache(String url, dynamic responseBody) async {
-    print('trying to cache = ${url})');
+    print('Trying to cache = $url');
     final prefs = await SharedPreferences.getInstance();
-    String jsonResponse =
-        jsonEncode(responseBody); // Convert response to JSON string
-    await prefs.setString(url, jsonResponse); // Store it in SharedPreferences
+
+    // Convert responseBody to a JSON string
+    String jsonString = jsonEncode(responseBody);
+
+    // UTF-8 encode the JSON string
+    List<int> utf8Bytes = utf8.encode(jsonString);
+    String utf8EncodedString =
+        base64Encode(utf8Bytes); // Encode to base64 to safely store it
+
+    // Store the base64 encoded JSON string
+    await prefs.setString(url, utf8EncodedString);
     print("Response cached for URL: $url");
   }
 }

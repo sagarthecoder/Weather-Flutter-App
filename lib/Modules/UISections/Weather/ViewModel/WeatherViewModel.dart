@@ -63,29 +63,36 @@ class WeatherViewModel extends ChangeNotifier {
   }
 
   Future<CityLocation?> _getCityLocation(String city) async {
-    final hasNetwork = await InternetConnection().hasInternetAccess;
-    print('conection = ${hasNetwork}');
     final url =
         "https://api.openweathermap.org/geo/1.0/direct?q=${city.replaceAll(' ', '%20')}&limit=1&appid=${WeatherConfig.apiKey}";
-    if (hasNetwork) {
-      final response = await http.get(Uri.parse(url));
-      await APICacheService.shared.setCache(url, response.body);
-      final jsonResponse = json.decode(response.body);
-      CityLocationList? locationList = CityLocationList.fromJson(jsonResponse);
-      return locationList.locations?.first;
-    } else {
-      var cachedResponse = await APICacheService.shared.fetchResponse(url);
-      print('cache response = ${cachedResponse.toString()}');
-      if (cachedResponse != null) {
-        // Use the cached response body for offline use
-        // final jsonResponse = json.decode(cachedResponse.body);
-        final decodedData = jsonDecode(cachedResponse.body);
-        CityLocationList? locationList = CityLocationList.fromJson(decodedData);
-        return locationList.locations?.first;
-      } else {
-        throw Exception('No cached data available and no network connection');
-      }
-    }
+    final result = await NetworkService.shared
+        .genericApiRequest(url, RequestMethod.get, CityLocation.fromJson);
+    return result?.data?.first;
+    // final hasNetwork = await InternetConnection().hasInternetAccess;
+    // print('conection = ${hasNetwork}');
+    // final url =
+    //     "https://api.openweathermap.org/geo/1.0/direct?q=${city.replaceAll(' ', '%20')}&limit=1&appid=${WeatherConfig.apiKey}";
+    // if (hasNetwork) {
+    //   final result = await NetworkService.shared.genericApiRequest(url, RequestMethod.get, CityLocation.fromJson);
+    //   return result?.data?.first;
+    // final response = await http.get(Uri.parse(url));
+    // await APICacheService.shared.setCache(url, response.body);
+    // final jsonResponse = json.decode(response.body);
+    // CityLocationList? locationList = CityLocationList.fromJson(jsonResponse);
+    // return locationList.locations?.first;
+    // } else {
+    //   var cachedResponse = await APICacheService.shared.fetchResponse(url);
+    //   print('cache response = ${cachedResponse.toString()}');
+    //   if (cachedResponse != null) {
+    //     // Use the cached response body for offline use
+    //     // final jsonResponse = json.decode(cachedResponse.body);
+    //     final decodedData = jsonDecode(cachedResponse.body);
+    //     CityLocationList? locationList = CityLocationList.fromJson(decodedData);
+    //     return locationList.locations?.first;
+    //   } else {
+    //     throw Exception('No cached data available and no network connection');
+    //   }
+    // }
   }
 
   Future<void> _updateWeather(double? lat, double? lon) async {
@@ -96,9 +103,10 @@ class WeatherViewModel extends ChangeNotifier {
     }
     final url =
         "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=${WeatherConfig.apiKey}";
-    final data = await NetworkService.shared
+    final result = await NetworkService.shared
         .genericApiRequest(url, RequestMethod.get, WeatherResult.fromJson);
-    weatherResult = data;
+    print('weather data count = ${result?.data?.length}');
+    weatherResult = result?.data?.first;
     notifyListeners();
   }
 
