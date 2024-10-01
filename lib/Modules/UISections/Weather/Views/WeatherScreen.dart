@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/ViewModel/WeatherViewModel.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/TemperatureInfoView.dart';
 import 'package:weather_flutter/Modules/UISections/Weather/Views/WeatherGridList.dart';
 
 import '../Manager/WeatherManager.dart';
-import '../Model/WeatherResult.dart';
 import 'CustomSearchDelegate.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -17,19 +17,23 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  WeatherViewModel viewModel = WeatherViewModel();
+  // WeatherViewModel viewModel = WeatherViewModel();
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<WeatherViewModel>().reset();
-    });
+    Get.put(
+        WeatherViewModel()); // Ensure that the ViewModel is initialized here
+    WeatherViewModel viewModel = Get.find();
+    viewModel.reset();
+    // viewModel = Get.find();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<WeatherViewModel>().reset();
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    viewModel = Provider.of<WeatherViewModel>(
-        context); //context.read<WeatherViewModel>();
+    WeatherViewModel viewModel = Get.find();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0XFF2E335A),
@@ -50,8 +54,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
               icon: const Icon(Icons.search_outlined))
         ],
       ),
-      body: Consumer<WeatherViewModel>(
-        builder: (context, viewModel, child) {
+      body: GetX<WeatherViewModel>(
+        builder: (_) {
           return Stack(
             children: [
               Container(
@@ -61,7 +65,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     makeTopView(context),
                     Expanded(
                       child: WeatherGridList(
-                        weatherResult: viewModel.weatherResult,
+                        weatherResult: viewModel.weatherResult?.value,
                       ),
                     ),
                   ],
@@ -76,11 +80,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   void didSelectSearchItem(String item) {
+    WeatherViewModel viewModel = Get.find();
     viewModel.updateWeatherByCity(item);
   }
 
   Widget makeTopView(BuildContext context) {
-    WeatherResult? weatherResult = viewModel.weatherResult;
+    WeatherViewModel viewModel = Get.find();
+    final weatherResult = viewModel.weatherResult?.value;
     return Container(
       height: 94.0,
       width: double.infinity,
@@ -107,7 +113,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Widget showLoaderIfNeeded() {
-    if (viewModel.isLoading) {
+    WeatherViewModel viewModel = Get.find();
+    if (viewModel.isLoading.value) {
       return Positioned.fill(
         child: Container(
           color: Colors.black.withOpacity(0.4),

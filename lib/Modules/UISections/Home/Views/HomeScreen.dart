@@ -38,10 +38,11 @@ class _HomeScreenState extends State<HomeScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          ChangeNotifierProvider<WeatherViewModel>(
-            create: (context) => WeatherViewModel(),
-            child: WeatherScreen(),
-          ),
+          // ChangeNotifierProvider<WeatherViewModel>(
+          //   create: (context) => WeatherViewModel(),
+          //   child: WeatherScreen(),
+          // ),
+          WeatherScreen(),
           ThemeView(),
         ],
       ),

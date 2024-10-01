@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 
 import '../ViewModel/WeatherViewModel.dart';
@@ -50,7 +52,8 @@ class CustomSearchDelegate extends SearchDelegate {
     if (queryString.isNotEmpty) {
       // Wrap this in a try-catch to catch any exceptions
       try {
-        var viewModel = Provider.of<WeatherViewModel>(parentContext);
+        WeatherViewModel viewModel =
+            Get.find(); //Provider.of<WeatherViewModel>(parentContext);
         viewModel.addNewCity(queryString);
         close(context, queryString);
       } catch (error) {
@@ -67,7 +70,7 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     // Use watch here to listen for updates and rebuild suggestions when data changes
-    var viewModel = Provider.of<WeatherViewModel>(parentContext);
+    WeatherViewModel viewModel = Get.find();
 
     final searchTerms = viewModel.favoriteCities;
     print('city count = ${searchTerms.length}');
