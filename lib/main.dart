@@ -5,6 +5,7 @@ import 'package:weather_flutter/Modules/UISections/Home/Views/HomeScreen.dart';
 import 'package:weather_flutter/Modules/UISections/Oauth/Login/Views/LoginScreen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:weather_flutter/Modules/UISections/Splash/Views/SplashScreen.dart';
 import 'package:weather_flutter/Modules/UISections/Theme/Model/ThemeProvider.dart';
 
 Future<void> main() async {
@@ -39,6 +40,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget decideDestination() {
-    return const LoginScreen();
+    return const SplashScreen();
   }
 }
