@@ -44,9 +44,14 @@ class WeatherViewModel extends GetxController {
       return;
     }
     isLoading.value = true;
+    final url =
+        "https://api.openweathermap.org/data/2.5/weather?q=${cityName.replaceAll(' ', '%20')}&appid=${WeatherConfig.apiKey}";
+
     try {
-      final cityLocation = await _getCityLocation(cityName);
-      await _updateWeather(cityLocation?.lat, cityLocation?.lon);
+      final result = await NetworkService.shared
+          .genericApiRequest(url, RequestMethod.get, WeatherResult.fromJson);
+      print('weather data count = ${result?.data?.length}');
+      weatherResult.value = result?.data?.first;
     } catch (err) {
       print('City Error = ${err.toString()}');
     } finally {
